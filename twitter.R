@@ -24,12 +24,15 @@ f <- function(x) {
   broadcastId <- x["BRD_ID"]
   since <- sqlQuery(con, paste("SELECT MAX(TWEETID) AS TWEETID FROM tweets WHERE BRD_ID = ", broadcastId))
   sinceID <- NULL
+  sinceDate <- NULL
   since <- since$TWEETID
-  if (length(since) == 1) {
-    sinceID = as.character(since[1])
+  if (is.na(since)) {
+    sinceDate <- as.character(x["DATETIME"])
+  } else {
+    sinceID <- as.character(since[1])
   }
 
-  tweets <- searchTwitter(hashtag, n=1000, sinceID=sinceID, cainfo="cacert.pem")
+  tweets <- searchTwitter(hashtag, n=100, sinceID=sinceID, since=sinceDate, cainfo="cacert.pem")
   tweets <- do.call("rbind", lapply(tweets, as.data.frame))
   tweets <- tweets[,c("text", "created", "id")]
   tweets[,"BRD_ID"] <- broadcastId
