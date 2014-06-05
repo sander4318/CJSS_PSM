@@ -26,6 +26,7 @@ save(list="twitCred", file="twitCred")
 
 ##Only the for the firsttime when app will start
 ################################################
+library(plyr)
 library(RODBC)
 library(DBI)
 library(twitteR)
