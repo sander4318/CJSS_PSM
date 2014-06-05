@@ -53,7 +53,7 @@ tweets <- searchTwitter(hashtag, n=10, sinceID=sinceID, lang="nl", cainfo="cacer
 tweets <- do.call("rbind", lapply(tweets, as.data.frame))
 tweets <- tweets[,c("id", "created", "text", "screenName", "isRetweet")]
 
-values <- paste("(",tvShowId,",",tweets$id,",'",strptime(tweets$created, '%Y-%m-%d %H:%M:%S'),"','",gsub("[[:punct:]]", "", tweets$text),"','",tweets$screenName,"','",tweets$isRetweet,"')", sep="", collapse=",")
+values <- paste("(",tvShowId,",",tweets$id,",'",strptime(tweets$created, '%Y-%m-%d %H:%M:%S'),"','",gsub("[[:punct:]]", "", tweets$text),"','",tweets$screenName,"',",tweets$isRetweet,")", sep="", collapse=",")
 cmd <- paste("insert into TWEETS(`TVS_ID`,`TWEETID`,`DATETIME`,`TWEET`,`SCREENNAME`,`ISRETWEET`) values ", values)
 sqlQuery(channel, cmd, as.is=TRUE)
 
