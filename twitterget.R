@@ -26,7 +26,6 @@ save(list="twitCred", file="twitCred")
 
 ##Only the for the firsttime when app will start
 ################################################
-library(plyr)
 library(RODBC)
 library(DBI)
 library(twitteR)
@@ -49,7 +48,7 @@ if (is.na(since)) {
   sinceID <- as.character(since[1])
 }
 
-tweets <- searchTwitter(hashtag, n=10, sinceID=sinceID, lang="nl", cainfo="cacert.pem")
+tweets <- searchTwitter(hashtag, n=10000, sinceID=sinceID, lang="nl", cainfo="cacert.pem")
 tweets <- do.call("rbind", lapply(tweets, as.data.frame))
 tweets <- tweets[,c("id", "created", "text", "screenName", "isRetweet")]
 
@@ -61,3 +60,7 @@ return(sinceID)
 }
 
 getTwittermessage(1, "#gtst")
+getTwittermessage(2, "#nosjournaal")
+getTwittermessage(3, "#hvnl")
+getTwittermessage(4, "#utopia")
+getTwittermessage(5, "#rtlboulevard")
