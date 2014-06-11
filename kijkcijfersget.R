@@ -1,4 +1,7 @@
 library(foreach)
+library(RODBC)
+library(DBI)
+channel <- odbcConnect("MySQL", uid="root")
 
 getKijkcijfers <- function(x) {
   
@@ -40,11 +43,11 @@ foreach(i=1:5) %do% {
   
   datum = paste(getrow$Datum,getrow$Tijd)
   newvalues <- paste("(",tvShowId,",'",datum,"','",getrow$Kijkcijfers,"','",duration,"')", sep="", collapse=",")
-  newcmd <- paste("insert into BROADCAST(`TVS_ID`,`STARTTIME`,`OFFICIALRATING`,`DURATION`) values ", newvalues)
+  newcmd <- paste("insert into broadcast(`TVS_ID`,`STARTTIME`,`OFFICIALRATING`,`DURATION`) values ", newvalues)
   sqlQuery(channel, newcmd, as.is=TRUE)
  }
 }
 
-getKijkcijfers("2014-06-03")
+getKijkcijfers("2014-06-07")
 
 

@@ -30,7 +30,7 @@ library(RODBC)
 library(DBI)
 library(twitteR)
 registerTwitterOAuth(twitCred)
-channel <- odbcConnect("MySQL", uid="root")
+channel <- odbcConnect("giko", uid="DB31433211A")
 ################################################
 
 ## Function Start
@@ -53,7 +53,7 @@ tweets <- do.call("rbind", lapply(tweets, as.data.frame))
 tweets <- tweets[,c("id", "created", "text", "screenName", "isRetweet")]
 
 values <- paste("(",tvShowId,",",tweets$id,",'",strptime(tweets$created, '%Y-%m-%d %H:%M:%S'),"','",gsub("[[:punct:]]", "", tweets$text),"','",tweets$screenName,"',",tweets$isRetweet,")", sep="", collapse=",")
-cmd <- paste("insert into TWEETS(`TVS_ID`,`TWEETID`,`DATETIME`,`TWEET`,`SCREENNAME`,`ISRETWEET`) values ", values)
+cmd <- paste("insert into tweets(`TVS_ID`,`TWEETID`,`DATETIME`,`TWEET`,`SCREENNAME`,`ISRETWEET`) values ", values)
 sqlQuery(channel, cmd, as.is=TRUE)
 
 return(sinceID)
