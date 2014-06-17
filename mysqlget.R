@@ -5,7 +5,7 @@ channel <- odbcConnect("giko", uid="DB31433211A")
 
 analyseData <- function(x) {
     
-    dataBroadcast <- paste("SELECT STARTTIME - INTERVAL 2 day_hour as STARTTIME, OFFICIALRATING, ADDTIME(STARTTIME, DURATION) - INTERVAL 2 day_hour as ENDTIME FROM broadcast where TVS_ID = ",x," AND OFFICIALRATING <> 0")
+    dataBroadcast <- paste("SELECT DISTINCT STARTTIME - INTERVAL 2 day_hour as STARTTIME, OFFICIALRATING, ADDTIME(STARTTIME, DURATION) - INTERVAL 2 day_hour as ENDTIME FROM broadcast where TVS_ID = ",x," AND OFFICIALRATING <> 0")
     cmd <- sqlQuery(channel, dataBroadcast, as.is=TRUE)
     #data <- data.frame(cmd$STARTTIME, cmd$OFFICIALRATING)
     starttime <- cmd$STARTTIME
@@ -21,6 +21,6 @@ analyseData <- function(x) {
     assign("data", cmd , env = .GlobalEnv)
   }
 
-analyseData(4)
+analyseData(5)
 
 #plot(strptime(data$STARTTIME, '%Y-%m-%d'), data$OFFICIALRATING, xlab = "Datum")

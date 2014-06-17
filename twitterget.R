@@ -1,4 +1,19 @@
-### Get your api to work for twitter the first time
+##Only the for the time when app will start
+################################################
+library(RODBC)
+library(DBI)
+library(twitteR)
+## This one Only when Twitter has handshake
+registerTwitterOAuth(twitCred)
+## need to set up ROBC in packages You can find this here
+## http://cran.r-project.org/web/packages/RODBC/index.html
+channel <- odbcConnect("giko", uid="DB31433211A")
+################################################
+
+
+
+### Get your Twitter api to work for twitter the first time 
+#### Twitter api Only once
 reqURL <- "https://api.twitter.com/oauth/request_token"
 accessURL <- "https://api.twitter.com/oauth/access_token"
 authURL <- "http://api.twitter.com/oauth/authorize"
@@ -24,14 +39,7 @@ registerTwitterOAuth(twitCred)
 #save the pin
 save(list="twitCred", file="twitCred")
 
-##Only the for the firsttime when app will start
-################################################
-library(RODBC)
-library(DBI)
-library(twitteR)
-registerTwitterOAuth(twitCred)
-channel <- odbcConnect("giko", uid="DB31433211A")
-################################################
+##### End Twitter api only once
 
 ## Function Start
 getTwittermessage <- function(x, y) {

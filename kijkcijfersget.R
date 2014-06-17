@@ -1,13 +1,16 @@
 library(foreach)
 library(RODBC)
 library(DBI)
-channel <- odbcConnect("MySQL", uid="root")
+channel <- odbcConnect("giko", uid="DB31433211A")
+registerTwitterOAuth(twitCred)
 
-getKijkcijfers <- function(x) {
+getKijkcijfers <- function() {
   
-assign("Datumkijk", x , env = .GlobalEnv)
+dataBroadcast <- paste("SELECT MAX(STARTTIME) + interval 23 day_hour as STARTTIME from broadcast")
+cmd <- sqlQuery(channel, dataBroadcast, as.is=TRUE)
+Datum <- strptime(cmd$STARTTIME,'%Y-%m-%d')
   
-url <- paste("http://cjss.scriptin.nl/download_csv.ashx?airedon=",Datumkijk)
+url <- paste("http://cjss.scriptin.nl/download_csv.ashx?airedon=",Datum)
   
 kijkcijfer = read.csv(url)
 
@@ -48,6 +51,6 @@ foreach(i=1:5) %do% {
  }
 }
 
-getKijkcijfers("2014-06-07")
+getKijkcijfers()
 
 
