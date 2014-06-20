@@ -8,6 +8,7 @@ registerTwitterOAuth(twitCred)
 ## need to set up ROBC in packages You can find this here
 ## http://cran.r-project.org/web/packages/RODBC/index.html
 channel <- odbcConnect("giko", uid="DB31433211A")
+#channel <- odbcConnect("MySQL", uid="root")
 ################################################
 
 
@@ -57,9 +58,12 @@ if (is.na(since)) {
 }
 
 tweets <- searchTwitter(hashtag, n=10000, sinceID=sinceID, lang="nl", cainfo="cacert.pem")
+#tweets <- searchTwitter('#gtst', n=10000, since='2014-06-18 18:00:00', until='2014-06-18 18:32:00', lang="nl", cainfo="cacert.pem")
+
 tweets <- do.call("rbind", lapply(tweets, as.data.frame))
 tweets <- tweets[,c("id", "created", "text", "screenName", "isRetweet")]
 
+#values <- paste("('1',",tweets$id,",'",strptime(tweets$created, '%Y-%m-%d %H:%M:%S'),"','",gsub("[[:punct:]]", "", tweets$text),"','",tweets$screenName,"',",tweets$isRetweet,")", sep="", collapse=",")
 values <- paste("(",tvShowId,",",tweets$id,",'",strptime(tweets$created, '%Y-%m-%d %H:%M:%S'),"','",gsub("[[:punct:]]", "", tweets$text),"','",tweets$screenName,"',",tweets$isRetweet,")", sep="", collapse=",")
 cmd <- paste("insert into tweets(`TVS_ID`,`TWEETID`,`DATETIME`,`TWEET`,`SCREENNAME`,`ISRETWEET`) values ", values)
 sqlQuery(channel, cmd, as.is=TRUE)
